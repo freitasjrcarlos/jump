@@ -22,6 +22,7 @@
 
     //Variáveis
     let canvas, contexto, ALTURA, LARGURA, frames = 0;
+    let maxPulos = 3;
 
     let chao = {
       y: 550,
@@ -42,18 +43,24 @@
       cor: '#ff4e4e',
       gravidade: 1.5,
       velocidade: 0,
+      force: 15,
+      qntPulos: 0,
 
       atualizar: function(){
         this.velocidade += this.gravidade;
         this.y += this.velocidade;
 
         if(this.y > chao.y - this.altura){
-          this.y = chao.y - this.altura;
+          this.y = chao.y - this.altura;          
+          this.qntPulos = 0;
         }
       },
 
       pula: function(){
-        
+        if(this.qntPulos < maxPulos){
+          this.velocidade = -this.force;
+          this.qntPulos++;
+        }
       },
 
       desenha: function(){
@@ -63,6 +70,7 @@
     };
 
     function clique(event) {
+      bloco.pula();
     }
 
     function principal() {
