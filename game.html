@@ -69,6 +69,32 @@
       }
     };
 
+    let obstaculos = {
+      obs: [],
+      cor: '#52a700',
+
+      insere: function(){
+        this.obs.push({
+          x: LARGURA,
+          largura: 30 + Math.floor(21 * Math.random()),
+          altura: 30 + Math.floor(121 * Math.random()),
+          cor: this.cor,
+        });
+      },
+
+      atualiza: function(){
+
+      },
+
+      desenha: function(){
+        for(let i = 0, tamanho = this.obs.length; i < tamanho; i++){
+          let obsi = this.obs[i];
+          contexto.fillStyle = obsi.cor;
+          contexto.fillRect(obsi.x, chao.y - obsi.altura, obsi.largura, obsi.altura);
+        }
+      }
+    };
+
     function clique(event) {
       bloco.pula();
     }
@@ -114,6 +140,7 @@
       contexto.fillRect(0, 0, LARGURA, ALTURA);
 
       chao.desenha();
+      obstaculos.desenha();
       bloco.desenha();
     }
 
