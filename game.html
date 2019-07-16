@@ -73,6 +73,11 @@
         }
       },
 
+      reset: function(){
+        bloco.velocidade = 0;
+        bloco.y = 0;
+      },
+
       desenha: function(){
         contexto.fillStyle = this.cor;
         contexto.fillRect(this.x, this.y, this.largura, this.altura);
@@ -142,8 +147,8 @@
       }
       else if(estadoAtual == estados.perdeu && bloco.y >= 2 * ALTURA){
         estadoAtual = estados.jogar;
-        bloco.velocidade = 0;
-        bloco.y = 0;
+        obstaculos.limpa();
+        bloco.reset();
       }
       
     }
@@ -187,10 +192,7 @@
       bloco.atualizar();
       if(estadoAtual == estados.jogando){
         obstaculos.atualiza();
-      }
-      else if(estadoAtual == estados.perdeu){
-        obstaculos.limpa();
-      }
+      }      
     }
 
 
