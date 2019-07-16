@@ -21,9 +21,17 @@
   <script>
 
     //Variáveis
-    let canvas, contexto, ALTURA, LARGURA, frames = 0;
+    let canvas, contexto, ALTURA, LARGURA, frames = 0, estadoAtual;
     let maxPulos = 3;
     let velocidade = 6;
+
+
+    //Estados
+    let estados = {
+      jogar: 0,
+      jogando: 1,
+      perdeu: 2
+    };
 
     let chao = {
       y: 550,
@@ -116,10 +124,22 @@
       }
     };
 
+    //Função clique
     function clique(event) {
-      bloco.pula();
+      if(estadoAtual == estados.jogando){
+        bloco.pula();
+      }
+      else if(estadoAtual == estados.jogar){
+        estadoAtual = estados.jogando;
+      }
+      else if(estadoAtual == estados.perdeu){
+        estadoAtual = estados.jogar;
+      }
+      
     }
 
+
+    //Função Principal
     function principal() {
       ALTURA = window.innerHeight;
       LARGURA = window.innerWidth;
@@ -139,9 +159,11 @@
       document.body.appendChild(canvas);
       document.addEventListener("mousedown", clique);
 
+      estadoAtual = estados.jogar;
       rodar();
     }
 
+    //Função rodar
     function rodar() {
       atualizar();
       desenhar();
@@ -149,20 +171,35 @@
       window.requestAnimationFrame(rodar);
     }
 
+    //Função Atualizar
     function atualizar() {
       frames++;
-
-      //Atualizar o bloco
       bloco.atualizar();
-      obstaculos.atualiza();
+      if(estadoAtual == estados.jogando){
+        obstaculos.atualiza();
+      }
+      
     }
 
+
+    //Função desenhar
     function desenhar() {
       contexto.fillStyle = "#50beff";
       contexto.fillRect(0, 0, LARGURA, ALTURA);
 
+      if(estadoAtual == estados.jogar){
+        contexto.fillStyle = 'green';
+        contexto.fillRect(LARGURA / 2 - 50, ALTURA / 2 - 50, 100,100);
+      }
+      else if(estadoAtual == estados.perdeu){
+        contexto.fillStyle = 'red';
+        contexto.fillRect(LARGURA / 2 - 50, ALTURA / 2 - 50, 100,100);
+      }
+      else if(estadoAtual == estados.jogando){
+        obstaculos.desenha();
+      }
+
       chao.desenha();
-      obstaculos.desenha();
       bloco.desenha();
     }
 
