@@ -23,6 +23,7 @@
     //Variáveis
     let canvas, contexto, ALTURA, LARGURA, frames = 0;
     let maxPulos = 3;
+    let velocidade = 6;
 
     let chao = {
       y: 550,
@@ -70,27 +71,47 @@
     };
 
     let obstaculos = {
-      obs: [],
-      cor: '#52a700',
+      _obs: [],
+      cores: ["#ffbd99", "#ff1c1c", "#ff85e1", "#52a4478", "#78ff5d"],
+      tempoInsere: 0,
 
       insere: function(){
-        this.obs.push({
-          x: LARGURA,
+        this._obs.push({
+          x: ALTURA,
           largura: 30 + Math.floor(21 * Math.random()),
           altura: 30 + Math.floor(121 * Math.random()),
-          cor: this.cor,
+          cor: this.cores[Math.floor(5 * Math.random())]
         });
+
+        this.tempoInsere = 50 + Math.floor(20 * Math.random());
       },
 
       atualiza: function(){
+        if(this.tempoInsere == 0){
+          this.insere();
+        }else {
+          this.tempoInsere--;
+        }
 
+
+        for (let i = 0, tamanho = this._obs.length; i < tamanho; i++) {
+         let obs = this._obs[i];
+      
+         obs.x -= velocidade;
+
+         if(obs.x <= -obs.largura){
+          this._obs.splice(i, 1);
+          tamanho--;
+          i--;
+         }
+        }
       },
 
       desenha: function(){
-        for(let i = 0, tamanho = this.obs.length; i < tamanho; i++){
-          let obsi = this.obs[i];
-          contexto.fillStyle = obsi.cor;
-          contexto.fillRect(obsi.x, chao.y - obsi.altura, obsi.largura, obsi.altura);
+        for(let i = 0, tamanho = this._obs.length; i < tamanho; i++){
+          let obs = this._obs[i];
+          contexto.fillStyle = obs.cor;
+          contexto.fillRect(obs.x, chao.y - obs.altura, obs.largura, obs.altura);
         }
       }
     };
@@ -133,6 +154,7 @@
 
       //Atualizar o bloco
       bloco.atualizar();
+      obstaculos.atualiza();
     }
 
     function desenhar() {
