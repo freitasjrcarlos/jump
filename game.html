@@ -118,6 +118,10 @@
         }
       },
 
+      limpa: function(){
+        this._obs = [];
+      },
+
       desenha: function(){
         for(let i = 0, tamanho = this._obs.length; i < tamanho; i++){
           let obs = this._obs[i];
